@@ -1,0 +1,8 @@
+tempCodeRunnerFile.py
+compiled_code*
+test/
+.vscode/
+.DS_Store
+__pycache__/
+test.*
+compl_test.*

@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "codedetectcompiler"
+version = "0.1.0"
+description = "CodeDetect Compiler is an application designed to convert program code images into executable files using advanced technologies in the field of optical character recognition (OCR) and code compilation. The program provides an intuitive graphical interface, which makes the process of converting code into executable files fast and convenient."
+authors = ["anlix-y <alex19mu9kg26@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/anlix-y/CodeDetect-Compiler"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+configparser = "^6.0.0"
+PyQt5 = "^5.15.10"
+Pygments = "^2.16.1"
+Pillow = "^10.1.0"
+pytesseract = "^0.3.10"
+autopep8 = "^2.0.4"
+
+[tool.poetry.group.dev.dependencies]
+configparser = "^6.0.0"
+PyQt5 = "^5.15.10"
+Pillow = "^10.1.0"
+pytesseract = "^0.3.10"
+autopep8 = "^2.0.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

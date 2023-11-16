@@ -1,0 +1,90 @@
+@font-face {
+    font-family: 'inconsolata';
+    src: url('style/font/inconsolata/Inconsolata-Black.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-ExtraBold.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-ExtraLight.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-Light.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-Medium.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-Regular.ttf') format('truetype'),
+         url('style/font/inconsolata/Inconsolata-SemiBold.ttf') format('truetype');
+}
+
+QWidget{
+    background: rgb(19, 19, 19);
+}
+
+QLabel{
+    font-family: "inconsolata", sans-serif;
+}
+
+QPushButton{
+    text-align: center;
+}
+
+QPushButton#openButton1, QPushButton#settingsButton{
+    color: rgb(27, 201, 162);
+    font-weight: 700;
+    padding: .5em 2em;
+    outline: none;
+    border: 2px solid rgb(27, 201, 162);
+    border-radius: 5px;
+} 
+
+QPushButton#openButton1:hover, QPushButton#settingsButton:hover{
+    background: rgba(27, 201, 162,.1);
+}
+
+QLabel#firstLabel{
+    color: rgb(137,137,137);
+    font-weight: bold;
+    font-size: 30px;
+    margin-top: 13px;
+}
+
+QPushButton#saveButton, #openButton2{
+    color: rgb(247,33,67);
+    border: 2px solid rgb(247,33,67);
+    padding: .5em 2em;
+    border-radius: 3px;
+    outline: none;
+    font-weight: 500;
+}
+
+QPushButton#saveButton:hover, #openButton2:hover{
+    background: rgb(247,33,67, .1);
+}
+
+QPushButton#openButton1, QPushButton#settingsButton {
+    margin-bottom: 50px;
+}
+
+#Ok{
+    color: rgb(247,33,67);
+    border: 2px solid rgb(247,33,67);
+    padding: .5em 2em;
+    border-radius: 3px;
+    outline: none;
+    font-weight: 250;     
+}
+
+#Open{
+    color: rgb(92,157,229);
+    border: 2px solid rgb(92,157,229);
+    padding: .5em 2em;
+    border-radius: 3px;
+    outline: none;
+    font-weight: 250;   
+}
+
+#Ok:hover{
+    background: rgb(247,33,67, .1);
+}
+
+#Open:hover{
+    background: rgb(92,157,229, .1);
+}
+
+#err_log{
+    font-size: 30px;
+    color: rgb(255, 0, 43);
+}
