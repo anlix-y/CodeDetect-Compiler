@@ -3,8 +3,9 @@ CodeDetect Compiler is an application designed to convert program code images in
 ![Preview](temp/git/Preview.png)
 # Quickstart
 Install Code Detect Compiler with [poetry](https://python-poetry.org), and start the app:
-```
+```bash
 git clone https://github.com/anlix-y/CodeDetect-Compiler
 cd CodeDetect-Compiler
 poetry install
+pip install PyQt5
 ```
