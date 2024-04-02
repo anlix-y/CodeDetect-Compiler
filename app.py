@@ -1,6 +1,7 @@
 import wx
 import os
 import wx.adv
+import webbrowser
 import configparser
 from CDC import Code
 
@@ -34,6 +35,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
         create_menu_item(menu, 'Open log.txt', self.on_log)
         create_menu_item(menu, 'Check update', self.on_update)
         menu.AppendSeparator()
+        create_menu_item(menu, 'Git author', self.on_aut)
         create_menu_item(menu, 'Exit', self.on_exit)
         return menu
 
@@ -42,7 +44,8 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
         self.SetIcon(icon, TRAY_TOOLTIP)
 
     def on_left_down(self, event):      
-        print ('Tray icon was left-clicked.')
+        from screenshot import StartAppS
+        StartAppS()
 
     def on_screen(self, event):
         from screenshot import StartAppS
@@ -51,6 +54,9 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
     def on_hello(self, event):
         from front import StartAppF
         StartAppF()
+
+    def on_aut(self, event):
+        webbrowser.open_new('https://github.com/anlix-y/CodeDetect-Compiler')
 
     def on_setting(self, event):
         try:
