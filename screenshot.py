@@ -35,15 +35,13 @@ class ScreenshotApp(QLabel):
         self.rubber_band.setGeometry(QRect(self.origin, event.pos()).normalized())
 
     def mouseReleaseEvent(self, event):
-        # Получаем координаты выбранной области экрана
+    # Получаем координаты выбранной области экрана в глобальных координатах
         rect = self.rubber_band.geometry()
-        x = rect.x()
-        y = rect.y()
-        width = rect.width()
-        height = rect.height()
+        top_left = self.mapToGlobal(rect.topLeft())
+        bottom_right = self.mapToGlobal(rect.bottomRight())
 
         # Делаем скриншот выбранной области экрана
-        screenshot = ImageGrab.grab((x, y, x + width, y + height))
+        screenshot = ImageGrab.grab((top_left.x(), top_left.y(), bottom_right.x(), bottom_right.y()))
 
         # Сохраняем скриншот в файл
         screenshot.save('temp/screenshot.png')
