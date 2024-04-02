@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QRubberBand
 from PyQt5.QtCore import Qt, QRect, QPoint, QSize
 from PIL import ImageGrab
-from app import FileDialogExample
+from front import FileDialogExample
 
 class ScreenshotApp(QLabel):
     def __init__(self):
@@ -52,9 +52,14 @@ class ScreenshotApp(QLabel):
         self.ex.showDialogWithFile(file_path)
         self.close()
 
+class StartAppS():
+    def __init__(self):
+        app = QApplication(sys.argv)
+        global ex
+        ex = FileDialogExample()
+        screenshot_app = ScreenshotApp()
+        screenshot_app.show()
+        app.exec_()
+
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = FileDialogExample()
-    screenshot_app = ScreenshotApp()
-    screenshot_app.show()
-    sys.exit(app.exec_())
+    StartAppS()
