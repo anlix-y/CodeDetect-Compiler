@@ -2,6 +2,7 @@ from pygments.formatters import NullFormatter
 from pygments import highlight
 from pygments.lexers import guess_lexer
 from PIL import Image
+from datetime import datetime
 import traceback
 import platform
 import configparser
@@ -13,6 +14,7 @@ config = configparser.ConfigParser()
 config.read("settings.ini")
 options = autopep8.parse_args(['--ignore=W191,E101,E111', '--aggressive', '--global-config', 'settings.ini', '-'])
 
+dt_string = datetime.now().strftime("%d/%m/%Y-%H:%M:%S")
 
 def get_operating_system():
     system_name = platform.system()
@@ -58,7 +60,42 @@ def get_text_info(image):
 
     return result_list
 
+def tabs_at_beginning(img, recognized_text_with_line_numbers):
+    info_list = get_text_info(img)
+    inaccuracy = int(config['CDC']['inaccuracy'])
 
+    # Deduplicate X-coordinates to handle indentation
+    unique_values = []
+    for entry in info_list:
+        value_found = False
+        for value in unique_values:
+            if abs(entry['coordinate_X'] - value) <= inaccuracy:
+                value_found = True
+                break
+        if not value_found:
+            unique_values.append(entry['coordinate_X'])
+    value_index_mapping = {value: index for index, value in enumerate(unique_values)}
+    for entry in info_list:
+        for value, index in value_index_mapping.items():
+            if abs(entry['coordinate_X'] - value) <= inaccuracy:
+                entry['coordinate_X'] = index
+
+    # Update 'coordinate_X' values in the first list
+    for i, (line_num, text, _) in enumerate(recognized_text_with_line_numbers):
+        matching_info = next((info for info in info_list if info['line_number'] == line_num), None)
+        if matching_info:
+            recognized_text_with_line_numbers[i] = (line_num, text, matching_info['coordinate_X'])
+        else:
+            # Handle case where 'line_num' is not found in info_list
+            recognized_text_with_line_numbers[i] = (line_num, text, 0)  # or another default value
+
+    # Output result
+    Code_list = recognized_text_with_line_numbers
+    for index, item in enumerate(Code_list):
+        Code_list[index] = '\t' * item[2] + item[1]
+
+    recognized_text = '\n'.join(Code_list)
+    return recognized_text
 
 class Code: 
     def __init__(self, img):
@@ -79,42 +116,7 @@ class Code:
 
             # If the language is known, adjust the indentation
             if lexer.name:
-                if lexer.name == 'Python':
-                    info_list = get_text_info(img)
-                    inaccuracy = int(config['CDC']['inaccuracy'])
-
-                    # Deduplicate X-coordinates to handle indentation
-                    unique_values = []
-                    for entry in info_list:
-                        value_found = False
-                        for value in unique_values:
-                            if abs(entry['coordinate_X'] - value) <= inaccuracy:
-                                value_found = True
-                                break
-                        if not value_found:
-                            unique_values.append(entry['coordinate_X'])
-                    value_index_mapping = {value: index for index, value in enumerate(unique_values)}
-                    for entry in info_list:
-                        for value, index in value_index_mapping.items():
-                            if abs(entry['coordinate_X'] - value) <= inaccuracy:
-                                entry['coordinate_X'] = index
-
-                    # Update 'coordinate_X' values in the first list
-                    for i, (line_num, text, _) in enumerate(recognized_text_with_line_numbers):
-                        matching_info = next((info for info in info_list if info['line_number'] == line_num), None)
-                        if matching_info:
-                            recognized_text_with_line_numbers[i] = (line_num, text, matching_info['coordinate_X'])
-                        else:
-                            # Handle case where 'line_num' is not found in info_list
-                            recognized_text_with_line_numbers[i] = (line_num, text, 0)  # or another default value
-
-                    # Output result
-                    Code_list = recognized_text_with_line_numbers
-                    for index, item in enumerate(Code_list):
-                        Code_list[index] = '\t' * item[2] + item[1]
-
-                    # Output result
-                    recognized_text = '\n'.join(Code_list)
+                recognized_text = tabs_at_beginning(img, recognized_text_with_line_numbers)
 
                 # Highlight the code with Pygments
                 code = highlight(recognized_text, lexer, NullFormatter())
@@ -130,7 +132,8 @@ class Code:
                 self.filename = lexer.filenames
                 self.temp_save = code
             else:
-                print('Error:\n', traceback.format_exc())
+                with open('log.txt', 'a') as error_file:
+                    error_file.write(f'error: {traceback.format_exc()}\n')
         except Exception as e:
             error_message = f'error: {e}\n'
             with open('log.txt', 'a') as error_file:
@@ -147,10 +150,13 @@ class Code:
             with open(flag_file, "w") as flag:
                 flag.write("Command executed")
 
+    def err_out(error_message):
+        error_message = f'error: {error_message}\n'
+        with open('log.txt', 'a') as error_file:
+            error_file.write(f'{dt_string}: {error_message}')
+
     # Save the file
     @staticmethod
     def compile_and_save(code_text, output_file):
         with open(output_file, 'w') as f:
             f.write(code_text)
-
-

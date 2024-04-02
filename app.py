@@ -77,10 +77,9 @@ class FileDialogExample(QMainWindow):
                 # Open a new window
                 self.textWindow = TextWindow(fname[0])
                 self.textWindow.show()
+
         except Exception as e:
-            error_message = f'error: {e}\n'
-            with open('log.txt', 'a') as error_file:
-                error_file.write(error_message)
+            Code.err_out(e)
             errorWindow = ErrorWindow()
             errorWindow.exec_()
 
@@ -91,16 +90,20 @@ class FileDialogExample(QMainWindow):
         settingsWindow.action1.triggered.connect(self.handleOption1)
         settingsWindow.action2.triggered.connect(self.handleOption2)
         settingsWindow.action3.triggered.connect(self.handleOption3)
+        settingsWindow.action4.triggered.connect(self.handleOption4)
         settingsWindow.exec_()  # Use exec_() to make the window modal (blocking)
 
     def handleOption1(self):
-        file_path = r'settings.ini'
-        if config['CDC']['your_system'].lower() == 'macos':
-            os.system(f'open {file_path}')
-        elif config['CDC']['your_system'].lower() == 'linux':
-            os.system(f'xdg-open {file_path}')
-        elif config['CDC']['your_system'].lower() == 'windows':
-            os.system(f'start {file_path}')
+        try:
+            file_path = r'settings.ini'
+            if config['CDC']['your_system'].lower() == 'macos':
+                os.system(f'open {file_path}')
+            elif config['CDC']['your_system'].lower() == 'linux':
+                os.system(f'xdg-open {file_path}')
+            elif config['CDC']['your_system'].lower() == 'windows':
+                os.system(f'start {file_path}')
+        except Exception as e:
+            Code.err_out(e)
 
     def handleOption2(self):
         import update
@@ -115,9 +118,10 @@ class FileDialogExample(QMainWindow):
             elif config['CDC']['your_system'].lower() == 'windows':
                 os.system(f'start {file_path}')
         except Exception as e:
-            error_message = f'error: {e}\n'
-            with open('log.txt', 'a') as error_file:
-                error_file.write(error_message)
+            Code.err_out(e)
+
+    def handleOption4(self):
+        pass
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -141,9 +145,7 @@ class FileDialogExample(QMainWindow):
             self.textWindow = TextWindow(filename)
             self.textWindow.show()
         except Exception as e:
-            error_message = f'error: {e}\n'
-            with open('log.txt', 'a') as error_file:
-                error_file.write(error_message)
+            Code.err_out(e)
             errorWindow = ErrorWindow()
             errorWindow.exec_()
 
@@ -223,13 +225,8 @@ class TextWindow(QWidget):
                 # Close the current window
                 self.close()
 
-                # Open a new window
-                self.textWindow = TextWindow(fname[0])
-                self.textWindow.show()
         except Exception as e:
-            error_message = f'error: {e}\n'
-            with open('log.txt', 'a') as error_file:
-                error_file.write(error_message)
+            Code.err_out(e)
             errorWindow = ErrorWindow()
             errorWindow.exec_()
 
@@ -244,10 +241,13 @@ class SettingsWindow(QMenu):
         self.action2.setCheckable(True)
         self.action3 = QAction('Open log.txt', self)
         self.action3.setCheckable(True)
+        self.action4 = QAction('test', self)
+        self.action4.setCheckable(True)
         radioGroup.addAction(self.action1)
         radioGroup.addAction(self.action2)
         radioGroup.addAction(self.action3)
-        self.addActions([self.action1, self.action2, self.action3])
+        radioGroup.addAction(self.action4)
+        self.addActions([self.action1, self.action2, self.action3, self.action4])
 
 class PopupWindow(QDialog):
     def __init__(self, message):
@@ -305,19 +305,10 @@ class ErrorWindow(QDialog):
                 os.system(f'xdg-open {file_path}')
             elif config['CDC']['your_system'].lower() == 'windows':
                 os.system(f'start {file_path}')
-
             self.close()
+            
         except Exception as e:
-            error_message = f'error: {e}\n'
-            with open('log.txt', 'a') as error_file:
-                error_file.write(error_message)
-
-def run_once():
-    flag_file = "command_ran.flag"
-    if not os.path.exists(flag_file):
-        
-        with open(flag_file, "w") as flag:
-            flag.write("Command executed")
+            Code.err_out(e)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

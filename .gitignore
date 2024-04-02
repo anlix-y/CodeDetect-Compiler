@@ -6,3 +6,4 @@ test/
 __pycache__/
 test.*
 compl_test.*
+command_ran.flag
