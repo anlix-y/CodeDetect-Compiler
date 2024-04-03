@@ -9,5 +9,5 @@ cd CodeDetect-Compiler
 poetry install
 pip install PyQt5
 ```
-# Installation
-Install for [Windows](https://drive.google.com/file/d/1rdnDyA7ZBGuAN2uG9i3AOnSwrPllhCKA/view?usp=sharing)
+# Auto installations
+Install for [Windows](https://drive.google.com/file/d/1rdnDyA7ZBGuAN2uG9i3AOnSwrPllhCKA/view?usp=sharing)(installation required [tesserectOCR](https://tesseract-ocr.github.io/tessdoc/Downloads.html))
